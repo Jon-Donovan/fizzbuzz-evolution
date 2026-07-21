@@ -1,0 +1,100 @@
+############################
+# 1) BASIC RULE
+############################
+# Automatically detect text files and normalize them in the repository.
+# Use LF in the repository for maximum compatibility with Linux/macOS/CI.
+* text=auto eol=lf
+
+############################
+# 2) EXPLICITLY MARK TEXT FILES (JUST IN CASE)
+############################
+# Scripts / Source code
+*.sh        text eol=lf
+*.bash      text eol=lf
+*.zsh       text eol=lf
+*.py        text eol=lf
+*.pyi       text eol=lf
+*.php       text eol=lf
+*.js        text eol=lf
+*.ts        text eol=lf
+*.css       text eol=lf
+*.html      text eol=lf
+
+# Configuration / Data
+*.json      text eol=lf
+*.yml       text eol=lf
+*.yaml      text eol=lf
+*.xml       text eol=lf
+*.xsd       text eol=lf
+*.md        text eol=lf
+*.txt       text eol=lf
+*.ini       text eol=lf
+*.cfg       text eol=lf
+*.conf      text eol=lf
+*.toml      text eol=lf
+*.env       text eol=lf
+.env.*      text eol=lf
+
+# Database / Migrations
+*.sql       text eol=lf
+
+# Common in PHP/Yii2 projects
+*.twig      text eol=lf
+*.tpl       text eol=lf
+
+# Typical Yii2 executable files (if stored in the repository)
+yii         text eol=lf
+yii_test    text eol=lf
+
+# Docker / Make
+Dockerfile  text eol=lf
+Makefile    text eol=lf
+
+############################
+# 3) LOCK FILES (TEXT FILES, SHOULD BE DIFFABLE)
+############################
+composer.lock      text eol=lf
+package-lock.json  text eol=lf
+yarn.lock          text eol=lf
+poetry.lock        text eol=lf
+Pipfile.lock       text eol=lf
+
+############################
+# 4) WINDOWS SCRIPTS (CRLF IS CONVENIENT FOR cmd.exe)
+############################
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+############################
+# 5) BINARY FILES
+############################
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.pdf  binary
+*.zip  binary
+*.7z   binary
+*.gz   binary
+*.tgz  binary
+*.rar  binary
+
+# Fonts
+*.woff  binary
+*.woff2 binary
+*.ttf   binary
+*.otf   binary
+*.eot   binary
+
+# Binary artifacts
+*.exe   binary
+*.dll   binary
+*.so    binary
+*.dylib binary
+*.class binary
+*.jar   binary
+
+# Localization files (often binary)
+*.mo   binary

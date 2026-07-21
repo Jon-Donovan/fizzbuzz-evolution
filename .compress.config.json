@@ -1,0 +1,25 @@
+{
+    "TargetDirectory": "{projectname}",
+    "ArchivePath": "{projectname}-{datetime}-{branch}-{commit}.zip",
+    "CleanTargetDirectory": true,
+    "Exclude": [
+        "\\.compress.config.json",
+        "\\.editorconfig",
+        "\\.gitattributes",
+        "\\.git\\*",
+        "\\.idea\\*",
+        "\\dist\\*",
+        "\\.venv\\*",
+        "\\venv\\*",
+        "*\\__pycache__\\*",
+        "\\.pytest_cache\\*",
+        "\\.mypy_cache\\*",
+        "\\.ruff_cache\\*",
+        "\\diff.txt",
+        "*.pyc",
+        "*.pyo",
+        "*.pyd",
+        "*.log",
+        "\\.env"
+    ]
+}
