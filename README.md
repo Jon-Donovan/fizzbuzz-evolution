@@ -17,7 +17,7 @@ The central idea is simple:
 | `classic` | `01-classic` | Textbook solution with an explicit `% 15` branch | Implemented |
 | `literal` | `02-literal` | Independent `Fizz` and `Buzz` conditions composed into a result | Implemented |
 | `middle` | `03-middle` | Separate evaluator, generator, CLI, types, and validation | Implemented |
-| `senior` | `04-senior` | Extensible rule engine | Planned |
+| `senior` | `04-senior` | Extensible rule engine | Implemented |
 | `enterprise` | `05-enterprise` | DDD, DI, configuration, CLI, and API | Planned |
 
 Python package names cannot start with digits, so the numerical stage order is documented
@@ -48,6 +48,7 @@ Detailed explanations are available in:
 - [01 — Classic](docs/01-classic.md)
 - [02 — Literal](docs/02-literal.md)
 - [03 — Middle](docs/03-middle.md)
+- [04 — Senior](docs/04-senior.md)
 
 ## Middle-stage API
 
@@ -62,6 +63,28 @@ generate(3, 5)     # ["Fizz", "4", "Buzz"]
 
 A reversed range raises `InvalidRangeError` instead of silently returning an empty list.
 Evaluation, range generation, and console interaction can be tested independently.
+
+## Senior-stage API
+
+The Senior stage replaces hard-coded conditions with an immutable, ordered rule engine:
+
+```python
+from fizzbuzz_evolution.senior import (
+    CLASSIC_RULES,
+    DivisibilityRule,
+    RuleEngine,
+    create_fizzbuzz_engine,
+)
+
+engine = create_fizzbuzz_engine()
+engine.evaluate(15)  # "FizzBuzz"
+
+extended = RuleEngine((*CLASSIC_RULES, DivisibilityRule(7, "Bazz")))
+extended.evaluate(105)  # "FizzBuzzBazz"
+```
+
+Custom rules only need to implement the structural `Rule` protocol. The engine preserves
+registration order and requires no modification when new rule types are introduced.
 
 ## Requirements
 
@@ -110,6 +133,15 @@ python -m fizzbuzz_evolution.middle --start -5 --end 15
 
 The Middle CLI supports custom inclusive bounds and reports reversed ranges as user-facing errors.
 
+Senior implementation:
+
+```bash
+python -m fizzbuzz_evolution.senior
+python -m fizzbuzz_evolution.senior --start -5 --end 15
+```
+
+The Senior CLI uses the classic preset while the public Python API supports custom rules.
+
 ## Quality checks
 
 ```bash
@@ -126,7 +158,8 @@ fizzbuzz-evolution/
 ├── docs/
 │   ├── 01-classic.md
 │   ├── 02-literal.md
-│   └── 03-middle.md
+│   ├── 03-middle.md
+│   └── 04-senior.md
 ├── src/
 │   └── fizzbuzz_evolution/
 │       ├── classic/

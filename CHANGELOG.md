@@ -9,8 +9,24 @@ project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Planned
 
-- Implement the `04-senior` stage.
 - Implement the `05-enterprise` stage.
+
+## [0.3.0] - 2026-07-22
+
+### Added
+
+- Structural `Rule` protocol and immutable `DivisibilityRule`.
+- Ordered `RuleEngine` that composes all matching rule outputs.
+- Classic FizzBuzz preset and engine factory.
+- Senior-stage range generator and testable CLI.
+- Validation errors for zero divisors, empty replacements, and reversed ranges.
+- Tests proving extension through custom rules without engine changes.
+- Senior-stage documentation and shared contract coverage.
+
+### Changed
+
+- Added the Senior implementation to module entry-point integration tests.
+- Updated project and package versions to `0.3.0`.
 
 ## [0.2.0] - 2026-07-22
 
