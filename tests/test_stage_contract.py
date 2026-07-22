@@ -6,11 +6,12 @@ import pytest
 
 from fizzbuzz_evolution.classic import fizzbuzz as classic_fizzbuzz
 from fizzbuzz_evolution.literal import fizzbuzz as literal_fizzbuzz
+from fizzbuzz_evolution.middle import evaluate as middle_evaluate
 
 FizzBuzzFunction = Callable[[int], str]
 
 
-@pytest.mark.parametrize("implementation", [classic_fizzbuzz, literal_fizzbuzz])
+@pytest.mark.parametrize("implementation", [classic_fizzbuzz, literal_fizzbuzz, middle_evaluate])
 @pytest.mark.parametrize(
     ("number", "expected"),
     [
