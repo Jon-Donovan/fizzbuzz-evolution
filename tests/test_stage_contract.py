@@ -5,16 +5,34 @@ from collections.abc import Callable
 import pytest
 
 from fizzbuzz_evolution.classic import fizzbuzz as classic_fizzbuzz
+from fizzbuzz_evolution.enterprise import (
+    GenerateSequenceCommand,
+    create_fizzbuzz_use_case,
+)
 from fizzbuzz_evolution.literal import fizzbuzz as literal_fizzbuzz
 from fizzbuzz_evolution.middle import evaluate as middle_evaluate
 from fizzbuzz_evolution.senior import create_fizzbuzz_engine
 
 FizzBuzzFunction = Callable[[int], str]
 SENIOR_EVALUATE = create_fizzbuzz_engine().evaluate
+ENTERPRISE_USE_CASE = create_fizzbuzz_use_case()
+
+
+def enterprise_evaluate(number: int) -> str:
+    """Adapt the structured Enterprise result to the shared string contract."""
+    result = ENTERPRISE_USE_CASE.execute(GenerateSequenceCommand(number, number))
+    return result.items[0].value
 
 
 @pytest.mark.parametrize(
-    "implementation", [classic_fizzbuzz, literal_fizzbuzz, middle_evaluate, SENIOR_EVALUATE]
+    "implementation",
+    [
+        classic_fizzbuzz,
+        literal_fizzbuzz,
+        middle_evaluate,
+        SENIOR_EVALUATE,
+        enterprise_evaluate,
+    ],
 )
 @pytest.mark.parametrize(
     ("number", "expected"),
