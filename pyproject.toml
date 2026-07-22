@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fizzbuzz-evolution"
-version = "0.0.1"
+version = "0.0.2"
 description = "One problem. Five stages of engineering evolution."
 readme = "README.md"
 requires-python = ">=3.12"
@@ -96,12 +96,13 @@ line-ending = "auto"
 
 [tool.mypy]
 python_version = "3.12"
-files = ["src", "tests"]
+files = ["src"]
 strict = true
 show_error_codes = true
 pretty = true
 warn_unreachable = true
 exclude = [
+    "^tests/",
     "^build/",
     "^dist/",
 ]
