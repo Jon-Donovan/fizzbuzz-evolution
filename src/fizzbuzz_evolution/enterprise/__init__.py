@@ -1,1 +1,1 @@
-"""Этап enterprise проекта FizzBuzz Evolution."""
+"""Enterprise-stage FizzBuzz package placeholder."""

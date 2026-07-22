@@ -192,7 +192,7 @@ steps:
               dry_run: false
               strict: true
               rules:
-                  - name: sync-package-version
+                  - name: sync-package-version-pyproject
                     source_file: project.yml
                     source_pattern: >
                         (?m)^\s*ver:\s*"(?P<value>\d+\.\d+\.\d+)"\s*$
@@ -200,6 +200,24 @@ steps:
                     target_pattern: >
                         (?m)^version = "(?P<value>\d+\.\d+\.\d+)"
                     target_replacement: 'version = "{value}"'
+
+                  - name: sync-package-version-init
+                    source_file: project.yml
+                    source_pattern: >
+                        (?m)^\s*ver:\s*"(?P<value>\d+\.\d+\.\d+)"\s*$
+                    target_file: src/fizzbuzz_evolution/__init__.py
+                    target_pattern: >
+                        (?m)^__version__ = "(?P<value>\d+\.\d+\.\d+)"
+                    target_replacement: '__version__ = "{value}"'
+
+                  - name: sync-package-version-init
+                    source_file: project.yml
+                    source_pattern: >
+                        (?m)^\s*ver:\s*"(?P<value>\d+\.\d+\.\d+)"\s*$
+                    target_file: tests/test_package.py
+                    target_pattern: >
+                        (?m)^\s*assert __version__ == "(?P<value>\d+\.\d+\.\d+)"
+                    target_replacement: '    assert __version__ == "{value}"'
 
         -   id: amend
             entry: steps.post_commit.99_amend:run
