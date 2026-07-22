@@ -18,7 +18,7 @@ The central idea is simple:
 | `literal` | `02-literal` | Independent `Fizz` and `Buzz` conditions composed into a result | Implemented |
 | `middle` | `03-middle` | Separate evaluator, generator, CLI, types, and validation | Implemented |
 | `senior` | `04-senior` | Extensible rule engine | Implemented |
-| `enterprise` | `05-enterprise` | DDD, DI, configuration, CLI, and API | Planned |
+| `enterprise` | `05-enterprise` | Domain models, ports, use case, and structured results | Implemented |
 
 Python package names cannot start with digits, so the numerical stage order is documented
 while package directories use the names `classic`, `literal`, `middle`, `senior`, and
@@ -49,6 +49,7 @@ Detailed explanations are available in:
 - [02 — Literal](docs/02-literal.md)
 - [03 — Middle](docs/03-middle.md)
 - [04 — Senior](docs/04-senior.md)
+- [05 — Enterprise Domain/Application](docs/05-enterprise-domain-application.md)
 
 ## Middle-stage API
 
@@ -85,6 +86,30 @@ extended.evaluate(105)  # "FizzBuzzBazz"
 
 Custom rules only need to implement the structural `Rule` protocol. The engine preserves
 registration order and requires no modification when new rule types are introduced.
+
+## Enterprise-stage API
+
+The Enterprise stage introduces immutable domain models and an application use case:
+
+```python
+from fizzbuzz_evolution.enterprise import (
+    GenerateSequenceCommand,
+    create_fizzbuzz_use_case,
+)
+
+use_case = create_fizzbuzz_use_case()
+result = use_case.execute(GenerateSequenceCommand(start=1, end=5))
+
+[item.value for item in result.items]
+# ["1", "2", "Fizz", "4", "Buzz"]
+
+result.items[2].matches[0].rule_id.value
+# "fizz"
+```
+
+The use case receives rules through the `RuleProvider` port and returns structured evaluations
+that retain the source number and every matching rule output. CLI, external configuration, and
+HTTP adapters remain intentionally outside this iteration.
 
 ## Requirements
 
@@ -159,7 +184,8 @@ fizzbuzz-evolution/
 │   ├── 01-classic.md
 │   ├── 02-literal.md
 │   ├── 03-middle.md
-│   └── 04-senior.md
+│   ├── 04-senior.md
+│   └── 05-enterprise-domain-application.md
 ├── src/
 │   └── fizzbuzz_evolution/
 │       ├── classic/

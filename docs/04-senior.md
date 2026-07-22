@@ -722,5 +722,3 @@ ruff format --check .
 mypy
 python -m pytest
 ```
-
-Текущая версия проекта, на основе которой составлен план: [архив FizzBuzz Evolution](sandbox:/mnt/data/fizzbuzz-evolution-2026-07-22-20-40-21-main-16dfbae.zip).

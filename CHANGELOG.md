@@ -7,9 +7,23 @@ project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-### Planned
+## [0.4.0] - 2026-07-23
 
-- Implement the `05-enterprise` stage.
+### Added
+
+- Enterprise domain value objects for numbers, ranges, rule identifiers, rule outputs, and evaluations.
+- Enterprise rule protocol and divisibility rule with explicit domain validation.
+- Structured domain evaluation service preserving all matching rule outputs.
+- Application command, result, `RuleProvider` port, and sequence generation use case.
+- Classic Enterprise preset and manual composition helper.
+- Enterprise domain and application unit tests.
+- Enterprise integration with the shared stage behavior contract.
+- English documentation for the Enterprise domain/application architecture.
+
+### Changed
+
+- Marked the Enterprise domain/application stage as implemented.
+- Updated project and package versions to `0.4.0`.
 
 ## [0.3.0] - 2026-07-22
 
