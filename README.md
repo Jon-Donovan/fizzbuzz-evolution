@@ -16,7 +16,7 @@ The central idea is simple:
 |---|---|---|---|
 | `classic` | `01-classic` | Textbook solution with an explicit `% 15` branch | Implemented |
 | `literal` | `02-literal` | Independent `Fizz` and `Buzz` conditions composed into a result | Implemented |
-| `middle` | `03-middle` | Pure functions, separation of concerns, and stronger validation | Planned |
+| `middle` | `03-middle` | Separate evaluator, generator, CLI, types, and validation | Implemented |
 | `senior` | `04-senior` | Extensible rule engine | Planned |
 | `enterprise` | `05-enterprise` | DDD, DI, configuration, CLI, and API | Planned |
 
@@ -26,7 +26,7 @@ while package directories use the names `classic`, `literal`, `middle`, `senior`
 
 ## Implemented behavior
 
-Both implemented stages expose the same public functions:
+The Classic and Literal stages expose the same public functions:
 
 ```python
 fizzbuzz(number: int) -> str
@@ -47,6 +47,21 @@ Detailed explanations are available in:
 
 - [01 — Classic](docs/01-classic.md)
 - [02 — Literal](docs/02-literal.md)
+- [03 — Middle](docs/03-middle.md)
+
+## Middle-stage API
+
+The Middle stage separates responsibilities into focused modules:
+
+```python
+from fizzbuzz_evolution.middle import evaluate, generate
+
+evaluate(15)       # "FizzBuzz"
+generate(3, 5)     # ["Fizz", "4", "Buzz"]
+```
+
+A reversed range raises `InvalidRangeError` instead of silently returning an empty list.
+Evaluation, range generation, and console interaction can be tested independently.
 
 ## Requirements
 
@@ -86,6 +101,15 @@ python -m fizzbuzz_evolution.literal
 
 Both commands print the FizzBuzz sequence from 1 through 100.
 
+Middle implementation:
+
+```bash
+python -m fizzbuzz_evolution.middle
+python -m fizzbuzz_evolution.middle --start -5 --end 15
+```
+
+The Middle CLI supports custom inclusive bounds and reports reversed ranges as user-facing errors.
+
 ## Quality checks
 
 ```bash
@@ -101,7 +125,8 @@ python -m pytest
 fizzbuzz-evolution/
 ├── docs/
 │   ├── 01-classic.md
-│   └── 02-literal.md
+│   ├── 02-literal.md
+│   └── 03-middle.md
 ├── src/
 │   └── fizzbuzz_evolution/
 │       ├── classic/

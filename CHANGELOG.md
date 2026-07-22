@@ -9,9 +9,23 @@ project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Planned
 
-- Implement the `03-middle` stage.
 - Implement the `04-senior` stage.
 - Implement the `05-enterprise` stage.
+
+## [0.2.0] - 2026-07-22
+
+### Added
+
+- Middle-stage evaluator, inclusive range generator, and testable CLI.
+- Typed `FizzBuzzError` and `InvalidRangeError` exception hierarchy.
+- CLI options for custom `--start` and `--end` bounds.
+- Boundary tests for zero, negative values, single-value ranges, and reversed ranges.
+- Middle-stage documentation and shared behavioral contract coverage.
+
+### Changed
+
+- Added the Middle implementation to the module entry-point integration tests.
+- Updated project and package versions to `0.2.0`.
 
 ## [0.1.0] - 2026-07-22
 
