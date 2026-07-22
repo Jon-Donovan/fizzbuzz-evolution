@@ -11,7 +11,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SOURCE_ROOT = PROJECT_ROOT / "src"
 
 
-@pytest.mark.parametrize("stage", ["classic", "literal", "middle"])
+@pytest.mark.parametrize("stage", ["classic", "literal", "middle", "senior"])
 def test_stage_module_prints_fizzbuzz_sequence(stage: str) -> None:
     environment = os.environ.copy()
     environment["PYTHONPATH"] = str(SOURCE_ROOT)
