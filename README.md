@@ -2,68 +2,91 @@
 
 > One problem. Five stages of engineering evolution.
 
-FizzBuzz Evolution — учебный Python-проект, показывающий, как одно рабочее решение
-последовательно развивается от классического упражнения до конфигурируемого приложения.
+FizzBuzz Evolution is an educational Python project that demonstrates how one working
+solution can evolve from a textbook exercise into a configurable application.
 
-Главная идея проекта:
+The central idea is simple:
 
-> Даже Junior может написать рабочее решение. Вопрос в том, насколько оно соответствует
-> предметной области и насколько его можно развивать.
+> A junior developer can write a working solution. The deeper question is how closely the
+> solution represents the domain and how safely it can evolve.
 
-## Этапы
+## Stages
 
-| Каталог | Этап | Основная идея |
-|---|---|---|
-| `classic` | `01-classic` | Классическое решение из учебников с отдельной проверкой `% 15` |
-| `literal` | `02-literal` | Буквальное условие и независимые правила для `Fizz` и `Buzz` |
-| `middle` | `03-middle` | Чистые функции, разделение ответственности и тестируемость |
-| `senior` | `04-senior` | Расширяемый движок правил |
-| `enterprise` | `05-enterprise` | DDD, DI, конфигурация, CLI и API |
+| Package | Stage | Main idea | Status |
+|---|---|---|---|
+| `classic` | `01-classic` | Textbook solution with an explicit `% 15` branch | Implemented |
+| `literal` | `02-literal` | Independent `Fizz` and `Buzz` conditions composed into a result | Implemented |
+| `middle` | `03-middle` | Pure functions, separation of concerns, and stronger validation | Planned |
+| `senior` | `04-senior` | Extensible rule engine | Planned |
+| `enterprise` | `05-enterprise` | DDD, DI, configuration, CLI, and API | Planned |
 
-Имена Python-пакетов не начинаются с цифр, поэтому числовой порядок этапов отражён в
-документации, а каталоги пакета называются `classic`, `literal`, `middle`, `senior` и
+Python package names cannot start with digits, so the numerical stage order is documented
+while package directories use the names `classic`, `literal`, `middle`, `senior`, and
 `enterprise`.
 
-## Текущее состояние
+## Implemented behavior
 
-Реализована **Итерация 1 — основа**:
+Both implemented stages expose the same public functions:
 
-- создан устанавливаемый пакет с `src`-layout;
-- подготовлен каркас пяти этапов;
-- настроены pytest и покрытие;
-- настроены Ruff и mypy;
-- добавлен GitHub Actions CI;
-- синхронизированы локальные Git-хуки;
-- добавлен минимальный smoke-тест пакета.
+```python
+fizzbuzz(number: int) -> str
+generate_fizzbuzz(start: int = 1, end: int = 100) -> list[str]
+```
 
-Бизнес-логика FizzBuzz будет добавляться в следующих итерациях.
+They produce identical output but use different reasoning:
 
-## Требования
+| Aspect | Classic | Literal |
+|---|---|---|
+| Combined case | Explicit `% 15` branch | Composition of independent matches |
+| Control flow | Mutually exclusive branches | Independent conditions |
+| Domain correspondence | Encodes a special combined case | Mirrors the stated rules |
+| Extensibility | Low | Slightly better |
+| Complexity | Minimal | Minimal |
 
-- Python 3.12 или новее;
-- pytest и pytest-cov устанавливаются как тестовые зависимости проекта;
-- Ruff и mypy используются как глобальные инструменты в локальной среде.
+Detailed explanations are available in:
 
-## Установка
+- [01 — Classic](docs/01-classic.md)
+- [02 — Literal](docs/02-literal.md)
 
-Установить проект и тестовые зависимости:
+## Requirements
+
+- Python 3.12 or newer;
+- pytest and pytest-cov as project test dependencies;
+- Ruff and mypy as globally installed local development tools.
+
+## Installation
 
 ```bash
 python -m pip install -e ".[test]"
 ```
 
-Ruff и mypy в локальные зависимости проекта намеренно не включены. Они должны быть
-доступны глобально:
+Ruff and mypy are intentionally not included in the project dependencies. They must be
+available globally in the local development environment:
 
 ```bash
 ruff --version
 mypy --version
 ```
 
-В CI инструменты качества устанавливаются явно, поскольку runner запускается в чистой
-изолированной среде.
+The CI workflow installs them explicitly because GitHub runners use isolated environments.
 
-## Проверки
+## Run
+
+Classic implementation:
+
+```bash
+python -m fizzbuzz_evolution.classic
+```
+
+Literal implementation:
+
+```bash
+python -m fizzbuzz_evolution.literal
+```
+
+Both commands print the FizzBuzz sequence from 1 through 100.
+
+## Quality checks
 
 ```bash
 ruff check .
@@ -72,15 +95,13 @@ mypy
 python -m pytest
 ```
 
-Проверка с формированием XML-отчёта покрытия уже включена в конфигурацию pytest.
-Файл создаётся по пути `coverage.xml`.
-
-## Структура
+## Project structure
 
 ```text
 fizzbuzz-evolution/
-├── .github/workflows/checks.yml
-├── .githooks/config.yml
+├── docs/
+│   ├── 01-classic.md
+│   └── 02-literal.md
 ├── src/
 │   └── fizzbuzz_evolution/
 │       ├── classic/
@@ -98,19 +119,11 @@ fizzbuzz-evolution/
 └── project.yml
 ```
 
-## Контроль качества
+## Language policy
 
-Локальные Git-хуки выполняют:
+Source code, comments, docstrings, command-line messages, and project documentation are
+written in English. Translations, when needed, should be maintained separately.
 
-- проверку staged-файлов и поиск секретов;
-- компиляцию изменённых Python-файлов;
-- автоматическое исправление и форматирование Ruff;
-- Ruff, mypy и pytest перед отправкой изменений;
-- проверку Conventional Commits.
+## License
 
-Автоматическое изменение версии после каждого коммита отключено до выбора единого
-источника версии проекта.
-
-## Лицензия
-
-См. файл [LICENSE](LICENSE).
+See [LICENSE](LICENSE).
