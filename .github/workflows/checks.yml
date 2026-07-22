@@ -1,0 +1,49 @@
+name: Checks
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install project and test dependencies
+        run: python -m pip install --upgrade pip && python -m pip install -e ".[test]"
+
+      # Ruff и mypy глобальны только в локальной среде разработчика.
+      # В изолированной среде CI они устанавливаются явно.
+      - name: Install quality tools
+        run: python -m pip install "ruff>=0.12,<1" "mypy>=1.17,<2"
+
+      - name: Ruff lint
+        run: ruff check .
+
+      - name: Ruff format
+        run: ruff format --check .
+
+      - name: Mypy
+        run: mypy
+
+      - name: Tests with coverage
+        run: python -m pytest
+
+      - name: Build package
+        run: |
+          python -m pip install "build>=1.2,<2"
+          python -m build

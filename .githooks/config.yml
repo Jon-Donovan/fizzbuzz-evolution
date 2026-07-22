@@ -1,0 +1,254 @@
+version: 1
+loglevel: info
+
+profiles:
+    local:
+        enabled: true
+    ci:
+        enabled: false
+
+guards:
+    reentry_env: GITHOOKS_REENTRY
+    lockfile: .git/githooks.lock
+
+policy:
+    fail_fast: true
+    timeout_sec: 30
+
+steps:
+    pre-commit:
+        -   id: check_staged
+            entry: steps.pre_commit.10_check_staged:run
+            enabled: true
+            args:
+                include_globs: [ ]
+                exclude_globs:
+                    - ".git/**"
+                    - ".githooks/**"
+                    - ".venv/**"
+                    - "venv/**"
+                    - "env/**"
+                    - "build/**"
+                    - "dist/**"
+                    - "site/**"
+                    - ".tox/**"
+                    - ".nox/**"
+                    - ".pytest_cache/**"
+                    - ".mypy_cache/**"
+                    - ".ruff_cache/**"
+                    - "htmlcov/**"
+                    - "**/__pycache__/**"
+                    - "*.egg-info/**"
+                    - "**/*.egg-info/**"
+                max_file_size_mb: 2
+                max_file_size_bytes: null
+                secret_scan: true
+                skip_binary: true
+                binary_null_ratio_threshold: 0.001
+                deny_regexes:
+                    - '(?i)^\s*(?:secret_key|api_key|access_token|auth_token|password)\s*=\s*["''][^"''\r\n]{8,}["'']'
+                allow_regexes:
+                    - '(?i)(?:os\.getenv|os\.environ|getenv|env\(|secretstr|changeme|example|dummy|test)'
+
+        -   id: run_file_actions
+            entry: steps.pre_commit.20_run_file_actions:run
+            enabled: true
+            args:
+                rules:
+                    -   name: python-quality
+                        include_globs:
+                            - "*.py"
+                            - "**/*.py"
+                        exclude_globs:
+                            - ".githooks/**"
+                            - ".venv/**"
+                            - "venv/**"
+                            - "env/**"
+                            - "build/**"
+                            - "dist/**"
+                            - ".tox/**"
+                            - ".nox/**"
+                        stop_on_first_error: true
+                        actions:
+                            -   type: command
+                                run_mode: batch
+                                command: "python -m py_compile {files}"
+                                timeout_sec: 30
+                                fail_on_nonzero: true
+
+                            -   type: command
+                                run_mode: batch
+                                command: "ruff check --fix {files}"
+                                timeout_sec: 60
+                                git_add: true
+                                fail_on_nonzero: true
+
+                            -   type: command
+                                run_mode: batch
+                                command: "ruff format {files}"
+                                timeout_sec: 60
+                                git_add: true
+                                fail_on_nonzero: true
+
+                    -   name: yaml-no-tabs
+                        include_globs:
+                            - "*.yml"
+                            - "*.yaml"
+                            - "**/*.yml"
+                            - "**/*.yaml"
+                        exclude_globs:
+                            - ".githooks/**"
+                            - ".venv/**"
+                            - "venv/**"
+                        actions:
+                            -   type: python
+                                run_mode: batch
+                                entry: handlers.python_checks:ensure_no_tabs
+                                kwargs: { }
+                                fail_on_nonzero: true
+
+    commit-msg:
+        -   id: normalize_cc
+            entry: steps.commit_msg.10_normalize_cc:run
+            enabled: true
+            args:
+                autoprefix_type: chore
+                autoprefix_if_no_match: true
+                lower_scope: true
+
+        -   id: validate_cc
+            entry: steps.commit_msg.20_validate_cc:run
+            enabled: true
+            args:
+                skip_prefixes:
+                    - "Merge "
+                    - "Revert "
+                    - "fixup! "
+                    - "squash! "
+                allowed_types:
+                    - feat
+                    - fix
+                    - docs
+                    - refactor
+                    - test
+                    - chore
+                    - perf
+                    - ci
+                    - build
+                    - style
+                    - revert
+                require_scope: false
+                subject_min_len: 3
+                max_header_len: 120
+
+    post-commit:
+        -   id: version_bump
+            entry: steps.post_commit.50_version_bump:run
+            enabled: true
+            args:
+                file: project.yml
+                pattern: >
+                    (?m)^\s*build:\s*(?P<quote>["']?)(?P<build>[^\n"'#]+?)(?P=quote)\s*(?:#.*)?$
+                skip_if_env: GIT_POST_AMEND
+                git_add: true
+                dry_run: false
+
+        -   id: version_tags
+            entry: steps.post_commit.15_version_tags:run
+            enabled: true
+            args:
+                file: project.yml
+                full_pattern: >
+                    build:\s*"(?P<version>\d+\.\d+\.\d+)\.(?P<build>\d+)"
+                short_pattern: >
+                    ver:\s*"(?P<version>\d+\.\d+\.\d+)"
+                tag_template: "v{version}"
+                message_template: "Release {version}"
+                annotated: true
+                strict: false
+
+        -   id: create_tags
+            entry: steps.post_commit.20_create_tags:run
+            enabled: true
+            args:
+                build_file: project.yml
+                build_pattern: >
+                    (?m)^\s*build:\s*(?P<quote>["']?)(?P<build>[^\n"'#]+?)(?P=quote)\s*(?:#.*)?$
+                rules:
+                    -   name: release-tag
+                        types:
+                            - feat
+                            - fix
+                        match: "#deploy"
+                        template: "release-{build}"
+                        annotated: true
+                        message_template: "Release build {build}"
+
+        - id: sync_regex_value
+          entry: steps.post_commit.30_sync_regex_value:run
+          enabled: true
+          args:
+              skip_if_env: GIT_POST_AMEND
+              dry_run: false
+              strict: true
+              rules:
+                  - name: sync-package-version
+                    source_file: project.yml
+                    source_pattern: >
+                        (?m)^\s*ver:\s*"(?P<value>\d+\.\d+\.\d+)"\s*$
+                    target_file: pyproject.toml
+                    target_pattern: >
+                        (?m)^version = "(?P<value>\d+\.\d+\.\d+)"
+                    target_replacement: 'version = "{value}"'
+
+        -   id: amend
+            entry: steps.post_commit.99_amend:run
+            enabled: true
+            args:
+                reentry_env: GITHOOKS_REENTRY
+
+    pre-push:
+        -   id: run_checks
+            entry: steps.pre_push.10_run_checks:run
+            enabled: true
+            args:
+                stop_on_first_error: true
+                max_parallel: 2
+                skip_if_env:
+                    - SKIP_HOOKS
+                only_branches: [ ]
+                skip_branches:
+                    - "wip/*"
+                checks:
+                    -   name: ruff-check
+                        type: command
+                        command: "ruff check ."
+                        timeout_sec: 120
+                        run_in_parallel: false
+                        fail_on_nonzero: true
+                        stop_on_first_error: true
+
+                    -   name: ruff-format-check
+                        type: command
+                        command: "ruff format --check ."
+                        timeout_sec: 120
+                        run_in_parallel: false
+                        fail_on_nonzero: true
+                        stop_on_first_error: true
+
+                    -   name: mypy
+                        type: command
+                        command: "mypy"
+                        timeout_sec: 120
+                        run_in_parallel: false
+                        fail_on_nonzero: true
+                        stop_on_first_error: true
+
+                    -   name: pytest
+                        type: command
+                        command: "python -m pytest -q"
+                        timeout_sec: 300
+                        run_in_parallel: false
+                        fail_on_nonzero: true
+                        stop_on_first_error: true
+
