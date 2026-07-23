@@ -1,6 +1,6 @@
 # FizzBuzz Evolution
 
-> One problem. Five stages of engineering evolution.
+> One problem. Seven iterations of engineering evolution.
 
 FizzBuzz Evolution is an educational Python project that demonstrates how one working
 solution can evolve from a textbook exercise into a configurable application.
@@ -10,7 +10,7 @@ The central idea is simple:
 > A junior developer can write a working solution. The deeper question is how closely the
 > solution represents the domain and how safely it can evolve.
 
-## Stages
+## Iterations
 
 | Package | Stage | Main idea | Status |
 |---|---|---|---|
@@ -20,6 +20,7 @@ The central idea is simple:
 | `senior` | `04-senior` | Extensible rule engine | Implemented |
 | `enterprise` | `05-enterprise` | Domain models, ports, use case, and structured results | Implemented |
 | `enterprise` | `06-enterprise` | YAML configuration, CLI, presenters, and logging | Implemented |
+| repository | `07-completion` | Contracts, ADRs, release verification, and package publication readiness | Implemented |
 
 Python package names cannot start with digits, so the numerical stage order is documented
 while package directories use the names `classic`, `literal`, `middle`, `senior`, and
@@ -52,6 +53,9 @@ Detailed explanations are available in:
 - [04 — Senior](docs/04-senior.md)
 - [05 — Enterprise Domain/Application](docs/05-enterprise-domain-application.md)
 - [06 — Enterprise Infrastructure/Presentation](docs/06-enterprise-infrastructure-presentation.md)
+- [07 — Completion](docs/07-completion.md)
+- [Implementation Comparison](docs/comparison.md)
+- [Architecture Decision Records](docs/adr/)
 
 ## Middle-stage API
 
@@ -181,14 +185,19 @@ fizzbuzz-enterprise --config configs/fizzbuzz.yml
 Command-line arguments override YAML values, which override built-in defaults. Sequence output
 is written to stdout while logs and user-facing errors are written to stderr.
 
-## Quality checks
+## Quality and release checks
 
 ```bash
 ruff check .
 ruff format --check .
 mypy
 python -m pytest
+python -m build
+python -m twine check dist/*
 ```
+
+Install release tooling with `python -m pip install -e ".[release]"`. The test suite enforces a
+minimum total coverage of 95 percent and verifies the English-language repository policy.
 
 ## Project structure
 
@@ -200,7 +209,10 @@ fizzbuzz-evolution/
 │   ├── 03-middle.md
 │   ├── 04-senior.md
 │   ├── 05-enterprise-domain-application.md
-│   └── 06-enterprise-infrastructure-presentation.md
+│   ├── 06-enterprise-infrastructure-presentation.md
+│   ├── 07-completion.md
+│   ├── comparison.md
+│   └── adr/
 ├── src/
 │   └── fizzbuzz_evolution/
 │       ├── classic/

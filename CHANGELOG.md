@@ -7,6 +7,25 @@ project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-07-23
+
+### Added
+
+- Unified evaluation and sequence contracts across all five implementation styles.
+- Comparative architecture documentation and completion guide.
+- Architecture Decision Records for iterative evolution, the rule engine, ports and adapters,
+  YAML configuration, and the English-language policy.
+- Automated repository language-policy verification.
+- Release tooling extras and package artifact validation guidance.
+
+### Changed
+
+- Promoted package metadata to version `1.0.0` and stable development status.
+- Set the test suite minimum coverage threshold to 95 percent.
+- Replaced the remaining Russian Senior-stage documentation with English documentation.
+- Expanded CI to validate built distributions with Twine.
+
+
 ## [0.5.0] - 2026-07-23
 
 ### Added
