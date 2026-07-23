@@ -12,6 +12,8 @@ TEXT_TARGETS = (
     PROJECT_ROOT / "configs",
 )
 IGNORED_SUFFIXES = {".pyc"}
+IGNORED_DIRECTORY_SUFFIXES = (".egg-info",)
+IGNORED_DIRECTORIES = {"__pycache__", ".git", ".mypy_cache", ".pytest_cache", ".ruff_cache"}
 
 
 def _maintained_text_files() -> list[Path]:
@@ -19,7 +21,12 @@ def _maintained_text_files() -> list[Path]:
     for target in TEXT_TARGETS:
         candidates = (target,) if target.is_file() else target.rglob("*")
         files.extend(
-            path for path in candidates if path.is_file() and path.suffix not in IGNORED_SUFFIXES
+            path
+            for path in candidates
+            if path.is_file()
+            and path.suffix not in IGNORED_SUFFIXES
+            and not any(part in IGNORED_DIRECTORIES for part in path.parts)
+            and not any(part.endswith(IGNORED_DIRECTORY_SUFFIXES) for part in path.parts)
         )
     return files
 
