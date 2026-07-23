@@ -1,0 +1,19 @@
+version: 1
+
+application:
+  default_start: 1
+  default_end: 100
+  output_format: text
+
+logging:
+  level: WARNING
+
+rules:
+  - id: fizz
+    type: divisibility
+    divisor: 3
+    replacement: Fizz
+  - id: buzz
+    type: divisibility
+    divisor: 5
+    replacement: Buzz

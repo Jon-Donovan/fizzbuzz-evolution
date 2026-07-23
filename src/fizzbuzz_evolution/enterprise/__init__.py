@@ -6,7 +6,13 @@ from .application import (
     GenerateSequenceUseCase,
     RuleProvider,
 )
-from .bootstrap import StaticRuleProvider, create_fizzbuzz_use_case
+from .bootstrap import (
+    EnterpriseApplication,
+    StaticRuleProvider,
+    create_application,
+    create_application_from_config,
+    create_fizzbuzz_use_case,
+)
 from .domain import (
     DivisibilityRule,
     DomainError,
@@ -28,6 +34,7 @@ __all__ = [
     "CLASSIC_RULES",
     "DivisibilityRule",
     "DomainError",
+    "EnterpriseApplication",
     "Evaluation",
     "EvaluationService",
     "GenerateSequenceCommand",
@@ -44,5 +51,7 @@ __all__ = [
     "RuleOutput",
     "RuleProvider",
     "StaticRuleProvider",
+    "create_application",
+    "create_application_from_config",
     "create_fizzbuzz_use_case",
 ]

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fizzbuzz-evolution"
-version = "0.4.1"
+version = "0.5.0"
 description = "One problem. Five stages of engineering evolution."
 readme = "README.md"
 requires-python = ">=3.12"
@@ -20,7 +20,12 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Typing :: Typed",
 ]
-dependencies = []
+dependencies = [
+    "PyYAML>=6.0,<7",
+]
+
+[project.scripts]
+fizzbuzz-enterprise = "fizzbuzz_evolution.enterprise.presentation.cli:main"
 
 [project.optional-dependencies]
 test = [
