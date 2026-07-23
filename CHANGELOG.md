@@ -7,6 +7,24 @@ project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-07-23
+
+### Added
+
+- Typed, versioned YAML configuration for application defaults, logging, and divisibility rules.
+- Infrastructure rule provider and explicit composition root for configured applications.
+- Enterprise CLI with stable exit codes and CLI-over-YAML precedence.
+- Plain-text and structured JSON presenters.
+- Central logging configuration that keeps stdout machine-readable.
+- Unit, integration, and subprocess acceptance tests for the complete Enterprise pipeline.
+- English documentation and an example YAML configuration.
+
+### Changed
+
+- Added PyYAML as a runtime dependency and the `fizzbuzz-enterprise` console script.
+- Updated project and package versions to `0.5.0`.
+
+
 ## [0.4.0] - 2026-07-23
 
 ### Added

@@ -19,6 +19,7 @@ The central idea is simple:
 | `middle` | `03-middle` | Separate evaluator, generator, CLI, types, and validation | Implemented |
 | `senior` | `04-senior` | Extensible rule engine | Implemented |
 | `enterprise` | `05-enterprise` | Domain models, ports, use case, and structured results | Implemented |
+| `enterprise` | `06-enterprise` | YAML configuration, CLI, presenters, and logging | Implemented |
 
 Python package names cannot start with digits, so the numerical stage order is documented
 while package directories use the names `classic`, `literal`, `middle`, `senior`, and
@@ -50,6 +51,7 @@ Detailed explanations are available in:
 - [03 — Middle](docs/03-middle.md)
 - [04 — Senior](docs/04-senior.md)
 - [05 — Enterprise Domain/Application](docs/05-enterprise-domain-application.md)
+- [06 — Enterprise Infrastructure/Presentation](docs/06-enterprise-infrastructure-presentation.md)
 
 ## Middle-stage API
 
@@ -108,8 +110,8 @@ result.items[2].matches[0].rule_id.value
 ```
 
 The use case receives rules through the `RuleProvider` port and returns structured evaluations
-that retain the source number and every matching rule output. CLI, external configuration, and
-HTTP adapters remain intentionally outside this iteration.
+that retain the source number and every matching rule output. Iteration 6 adds YAML-backed
+configuration, a command-line adapter, text and JSON presenters, and centralized logging.
 
 ## Requirements
 
@@ -167,6 +169,18 @@ python -m fizzbuzz_evolution.senior --start -5 --end 15
 
 The Senior CLI uses the classic preset while the public Python API supports custom rules.
 
+Enterprise infrastructure and presentation:
+
+```bash
+python -m fizzbuzz_evolution.enterprise --start 1 --end 15
+python -m fizzbuzz_evolution.enterprise --config configs/fizzbuzz.yml
+python -m fizzbuzz_evolution.enterprise --start 1 --end 15 --format json
+fizzbuzz-enterprise --config configs/fizzbuzz.yml
+```
+
+Command-line arguments override YAML values, which override built-in defaults. Sequence output
+is written to stdout while logs and user-facing errors are written to stderr.
+
 ## Quality checks
 
 ```bash
@@ -185,7 +199,8 @@ fizzbuzz-evolution/
 │   ├── 02-literal.md
 │   ├── 03-middle.md
 │   ├── 04-senior.md
-│   └── 05-enterprise-domain-application.md
+│   ├── 05-enterprise-domain-application.md
+│   └── 06-enterprise-infrastructure-presentation.md
 ├── src/
 │   └── fizzbuzz_evolution/
 │       ├── classic/
