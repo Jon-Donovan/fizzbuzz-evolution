@@ -64,8 +64,8 @@ The Middle stage separates responsibilities into focused modules:
 ```python
 from fizzbuzz_evolution.middle import evaluate, generate
 
-evaluate(15)       # "FizzBuzz"
-generate(3, 5)     # ["Fizz", "4", "Buzz"]
+evaluate(15)  # "FizzBuzz"
+generate(3, 5)  # ["Fizz", "4", "Buzz"]
 ```
 
 A reversed range raises `InvalidRangeError` instead of silently returning an empty list.

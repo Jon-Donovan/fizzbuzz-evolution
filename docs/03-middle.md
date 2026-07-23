@@ -19,8 +19,8 @@ The module entry point delegates directly to `cli.main()` and contains no applic
 ```python
 from fizzbuzz_evolution.middle import evaluate, generate
 
-evaluate(15)       # "FizzBuzz"
-generate(3, 5)     # ["Fizz", "4", "Buzz"]
+evaluate(15)  # "FizzBuzz"
+generate(3, 5)  # ["Fizz", "4", "Buzz"]
 ```
 
 `evaluate()` is a pure function. It does not read input, print output, or depend on range
